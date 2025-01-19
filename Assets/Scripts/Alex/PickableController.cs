@@ -8,7 +8,9 @@ public enum ConsumibleType
 {
     Heal,
     Sword,
-    Rifle
+    Rifle,
+    Priest,
+    Farmer
 }
 public class PickableController : MonoBehaviour
 {
@@ -17,11 +19,13 @@ public class PickableController : MonoBehaviour
     [SerializeField] private GameObject dialogueCanvas;
     [SerializeField] private TextMeshProUGUI dialogueText;
     [SerializeField, TextArea(3, 6)] private string[] dialogueLines;
-
+    
+    public bool shouldDestroy;
     public bool isPlayerInRange;
     public bool isDialogueActive;
     public int lineIndex;
     public ConsumibleType consumibleType;
+    private bool _hasBetterWeapon;
 
     private float _typingTime = 0.05f;
     private bool _isTyping;
@@ -33,12 +37,14 @@ public class PickableController : MonoBehaviour
         dialogueCanvas.SetActive(false);
         
         //Instantiates the dialogue canvas
-        dialogueCanvas = Instantiate(dialogueCanvas, new Vector3(0,0,0), Quaternion.identity);
-
-        //Sets the dialogue text
-        dialogueText = dialogueCanvas.transform.GetChild(0)
-            .gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
-        
+        if (!dialogueText)
+        {
+            dialogueCanvas = Instantiate(dialogueCanvas, new Vector3(0,0,0), Quaternion.identity);
+            
+            //Sets the dialogue text
+            dialogueText = dialogueCanvas.transform.GetChild(0)
+                .gameObject.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,11 +67,57 @@ public class PickableController : MonoBehaviour
             dialogueMark.SetActive(false);
         }
     }
+    
+    private void CheckPossibleExtraDialogue()
+    {
+        if (this.consumibleType == ConsumibleType.Heal)
+        {
+            //Adds a new line to the dialogue with the number of heals the player will had
+            //With the following format: "Now you have X heals"
+            Array.Resize(ref dialogueLines, dialogueLines.Length + 1);
+            dialogueLines[^1] = "Now you have " + (PlayerInfo.Instance.currentHeals + 1) + " heals";
+        }
+        
+        if (this.consumibleType == ConsumibleType.Sword || 
+            this.consumibleType == ConsumibleType.Rifle || 
+            this.consumibleType == ConsumibleType.Farmer)
+        {
+            // Map consumibleType to the appropriate WeaponType
+            WeaponType weaponToEquip = consumibleType switch
+            {
+                ConsumibleType.Sword => WeaponType.Sword,
+                ConsumibleType.Rifle => WeaponType.Rifle,
+                ConsumibleType.Farmer => WeaponType.Gun, // Assuming Farmer maps to Gun; adjust if needed
+                _ => WeaponType.Hand // Default fallback
+            };
+
+            // Check if the weapon should be equipped
+            if (PlayerInfo.Instance.ShouldEquipWeapon(weaponToEquip))
+            {
+                PlayerInfo.Instance.ChangeWeapon(weaponToEquip);
+
+                // Add a new line to the dialogue indicating the weapon was equipped
+                Array.Resize(ref dialogueLines, dialogueLines.Length + 1);
+                dialogueLines[^1] = $"You have equipped the {weaponToEquip.ToString().ToLower()}";
+            }
+            else
+            {
+                _hasBetterWeapon = true;
+
+                // Add a new line to the dialogue indicating the player has a better weapon
+                Array.Resize(ref dialogueLines, dialogueLines.Length + 1);
+                dialogueLines[^1] = "You already have a better weapon";
+            }
+        }
+
+    }
 
     public void StartDialogue()
     {
         if (!isDialogueActive)
         {
+            CheckPossibleExtraDialogue();
+            PlayerInfo.Instance.FreezeMovement();
             isDialogueActive = true;
             dialogueCanvas.SetActive(true);
             dialogueMark.SetActive(false);
@@ -104,19 +156,34 @@ public class PickableController : MonoBehaviour
             }
             else
             {
+                //Switch case for the different types of consumibles
+                //Take into account if the player has a better weapon
                 switch (consumibleType)
                 {
                     case ConsumibleType.Heal:
-                        PlayerInfo.Instance.PickUpHeal();
+                        PlayerInfo.Instance.currentHeals++;
                         break;
                     case ConsumibleType.Sword:
-                        PlayerInfo.Instance.ChangeWeapon(WeaponType.Sword);
+                        if (!_hasBetterWeapon)
+                        {
+                            PlayerInfo.Instance.ChangeWeapon(WeaponType.Sword);
+                        }
                         break;
                     case ConsumibleType.Rifle:
-                        PlayerInfo.Instance.ChangeWeapon(WeaponType.Rifle);
+                        if (!_hasBetterWeapon)
+                        {
+                            PlayerInfo.Instance.ChangeWeapon(WeaponType.Rifle);
+                        }
                         break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                    case ConsumibleType.Priest:
+                        PlayerInfo.Instance.currentHeals++;
+                        break;
+                    case ConsumibleType.Farmer:
+                        if (!_hasBetterWeapon)
+                        {
+                            PlayerInfo.Instance.ChangeWeapon(WeaponType.Gun);
+                        }
+                        break;
                 }
                 dialogueCanvas.SetActive(false);
                 isDialogueActive = false;
@@ -124,9 +191,12 @@ public class PickableController : MonoBehaviour
                 _typingTime = 0.05f;
                 dialogueMark.SetActive(true);
                 isDialogueActive = false;
-                Destroy(dialogueCanvas);
-                Destroy(this.gameObject);
-                
+                if (shouldDestroy)
+                {
+                    Destroy(dialogueCanvas);
+                    Destroy(this.gameObject);
+                }
+                PlayerInfo.Instance.UnfreezeMovement();
             }
         }
     }

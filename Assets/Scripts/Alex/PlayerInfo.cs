@@ -31,6 +31,7 @@ public class PlayerInfo : MonoBehaviour
     public GameObject enemyPrefabSword;
     public GameObject enemyPrefabGun;
     public GameObject enemyPrefabRifle;
+    public GameObject enemyPrefabBoss;
     
     //Weapons prefabs
     public GameObject weaponPrefabSword;
@@ -49,6 +50,12 @@ public class PlayerInfo : MonoBehaviour
         currentPlayerPrefab = playerPrefabBase;
     }
     
+    public bool ShouldEquipWeapon(WeaponType weapon)
+    {
+        // Check if the new weapon has a higher priority than the current weapon
+        return weapon > currentWeapon;
+    }
+
     public void ChangeWeapon(WeaponType weapon)
     {
         currentWeapon = weapon;
@@ -88,6 +95,12 @@ public class PlayerInfo : MonoBehaviour
         }
     }
     
+    public void HealMax()
+    {
+        playerCurrentHP = maxHP;
+    }
+    
+    
     public void EnemyDefeated(GameObject enemy)
     {
         //If there is one enemy left to level up and the enemy defeated is sword type
@@ -99,7 +112,7 @@ public class PlayerInfo : MonoBehaviour
         }
         Destroy(enemy);
         //Enable player input
-        playerInput.enabled = true;
+        playerInput.GetComponent<CharacterMovement>().UnfreezeMovement();
         //Decrease enemies to level up
         enemiesToLevelUp--;
         if (enemiesToLevelUp <= 0)
@@ -114,12 +127,18 @@ public class PlayerInfo : MonoBehaviour
         currentHeals++;
     }
     
+    public int GetCurrentHeals()
+    {
+        return currentHeals;
+    }
+    
     public void EnemyEncountered(GameObject enemy)
     {
         //Get the enemy type from the EnemyInfo component
         EnemyType enemyType = enemy.GetComponent<EnemyInfo>().enemyType;
-        //Disable player input
-        playerInput.enabled = false;
+        //Disable player input with FreezeMovement method
+        playerInput.GetComponent<CharacterMovement>().FreezeMovement();
+        
         //Start battle with enemy using BattleSystem instance
         switch (enemyType)
         {
@@ -132,9 +151,19 @@ public class PlayerInfo : MonoBehaviour
             case EnemyType.Rifle:
                 BattleSystem.Instance.StartBattle(enemy, enemyPrefabRifle);
                 break;
+            case EnemyType.Boss:
+                BattleSystem.Instance.StartBattle(enemy, enemyPrefabBoss);
+                break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
+    }
+    public void FreezeMovement()
+    {
+        playerInput.GetComponent<CharacterMovement>().FreezeMovement();
+    }
+    public void UnfreezeMovement()
+    {
+        playerInput.GetComponent<CharacterMovement>().UnfreezeMovement();
     }
 }

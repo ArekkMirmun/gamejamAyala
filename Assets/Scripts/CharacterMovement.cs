@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class CharacterMovement : MonoBehaviour
 {
@@ -9,20 +10,31 @@ public class CharacterMovement : MonoBehaviour
     public float acceleration = 5f;        // Rate of acceleration
     [SerializeField] private Rigidbody rb; // Reference to the player's Rigidbody
     [SerializeField] private bool isSprinting = false; // Whether the player is sprinting
-    [SerializeField] private float stamina = 100f; // Player's stamina
+    [SerializeField] private float stamina = 200f; // Player's stamina
+    [SerializeField] private Animator animator; // Reference to the player's Animator
+    [SerializeField] private Slider staminaSlider; // Reference to the stamina slider
+    
 
     private float _targetSpeed = 0f;      // Desired speed based on input
     private float _currentSpeed = 0f;    // Current speed (accelerates toward _targetSpeed)
+    private bool _disableSprint = false; // Whether sprinting is disabled
+    private float _initialStamina;
     private float _xAxis = 0f;
     private float _zAxis = 0f;
+    public bool frozen = false;
+
 
     void Start()
     {
+        _initialStamina = stamina;
+        staminaSlider.maxValue = _initialStamina;
         _targetSpeed = 0f;
     }
 
     void FixedUpdate()
     {
+        if (frozen) return;
+        
         // Calculate movement input magnitude
         bool isMoving = _xAxis != 0 || _zAxis != 0;
 
@@ -36,22 +48,29 @@ public class CharacterMovement : MonoBehaviour
             if (stamina <= 0)
             {
                 isSprinting = false;
+                _disableSprint = true;
             }
         }
         else
         {
             stamina += 25f * Time.fixedDeltaTime;
-            if (stamina > 100)
+            if (stamina > _initialStamina)
             {
-                stamina = 100;
+                stamina = _initialStamina;
+                _disableSprint = false;
             }
         }
+        //update stamina slider
+        staminaSlider.value = stamina;
 
         // Gradually adjust the current speed toward the target speed
         _currentSpeed = Mathf.MoveTowards(_currentSpeed, _targetSpeed, acceleration * Time.fixedDeltaTime);
 
         // Calculate the movement vector
         Vector3 movement = new Vector3(_xAxis, 0, _zAxis).normalized * _currentSpeed;
+        
+        // Update the Animator with the current speed
+        animator.SetFloat("velocity", _currentSpeed);
 
         // Move the Rigidbody
         rb.MovePosition(rb.position + movement * Time.fixedDeltaTime);
@@ -76,7 +95,18 @@ public class CharacterMovement : MonoBehaviour
 
     public void OnSprint(InputValue value)
     {
+        if (_disableSprint) return;
         isSprinting = value.isPressed;
+    }
+    
+    public void FreezeMovement()
+    {
+        frozen = true;
+    }
+    
+    public void UnfreezeMovement()
+    {
+        frozen = false;
     }
 
     #endregion

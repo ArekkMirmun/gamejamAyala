@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 
-public enum BattleState {WAIT, START, PLAYERTURN, INPROGRESS, ENEMYTURN, WON, LOST }
+public enum BattleState {WAIT, START, PLAYERTURN, INPROGRESS, ENEMYTURN, RUNAWAY, WON, LOST }
 public class BattleSystem : MonoBehaviour
 {
 
@@ -35,7 +35,9 @@ public class BattleSystem : MonoBehaviour
     public SceneManager sceneManager;
     
     GameObject playerGO;
+    Animator playerAnimator;
     GameObject enemyGO;
+    Animator enemyAnimator;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -49,6 +51,7 @@ public class BattleSystem : MonoBehaviour
     //Starts the combat
     public void StartBattle(GameObject enemyHitted, GameObject enemyCombatPrefab)
     {
+        PlayerInfo.Instance.FreezeMovement();
         _currentEnemy = enemyHitted;
         playerInfo = PlayerInfo.Instance;
         _playerPrefab = playerInfo.currentPlayerPrefab;
@@ -60,8 +63,14 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator SetupBattle()
     {
+        //Pause daynight timer
+        TimeChangeScript.Instance.PauseTime();
+        
         playerGO = Instantiate(_playerPrefab, playerBattleStation);
         playerUnit = playerGO.GetComponent<Unit>();
+        
+        //Set player animator with child of player prefab
+        playerAnimator = playerGO.transform.GetChild(0).GetComponent<Animator>();
         
         playerUnit.unitLevel = playerInfo.currentLevel;
         playerUnit.currentHP = playerInfo.playerCurrentHP;
@@ -70,6 +79,10 @@ public class BattleSystem : MonoBehaviour
         
         enemyGO = Instantiate(_enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponent<Unit>();
+        
+        //Set enemy animator with child of enemy prefab
+        enemyAnimator = enemyGO.transform.GetChild(0).GetComponent<Animator>();
+        
         
         dialogueText.text = "A wild " + enemyUnit.unitName + " approaches...";
         
@@ -118,6 +131,33 @@ public class BattleSystem : MonoBehaviour
         
         StartCoroutine(PlayerHeal());
     }
+    
+    public void OnRunButton()
+    {
+        if (state != BattleState.PLAYERTURN)
+            return;
+        
+        state = BattleState.RUNAWAY;
+        
+        StartCoroutine(RunAway());
+    }
+
+    private IEnumerator RunAway()
+    {
+        //Run away from the enemy with a chance of 80%
+        if (Random.Range(0, 5) != 3)
+        {
+            dialogueText.text = "You ran away!";
+            StartCoroutine(EndBattle());
+        }
+        else
+        {
+            dialogueText.text = "You couldn't run away!";
+            yield return new WaitForSeconds(dialogueSpeedSeconds);
+            state = BattleState.ENEMYTURN;
+            StartCoroutine(EnemyTurn());
+        }
+    }
 
     private IEnumerator PlayerHeal()
     {
@@ -155,6 +195,10 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator PlayerAttack()
     {
+        //Attack enemy triggering the attack animation
+        playerAnimator.SetTrigger("Attack");
+        dialogueText.text = "You attack!";
+        yield return new WaitForSeconds(dialogueSpeedSeconds);
         int damage = playerUnit.damage;
         //calculate critic change 1/5
         bool ifCrit = Random.Range(0, 5) == 0;
@@ -169,7 +213,7 @@ public class BattleSystem : MonoBehaviour
         bool isDead = enemyUnit.TakeDamage(damage);
         
         enemyHUD.SetHP(enemyUnit.currentHP);
-        dialogueText.text = "The attack was successful!";
+        dialogueText.text = "The made " + damage + " damage!";
         
         yield return new WaitForSeconds(dialogueSpeedSeconds);
         
@@ -199,6 +243,8 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator EnemyTurn()
     {
+        //Enemy attacks player triggering the attack animation
+        enemyAnimator.SetTrigger("Attack");
         dialogueText.text = enemyUnit.unitName + " attacks!";
         
         yield return new WaitForSeconds(dialogueSpeedSeconds);
@@ -235,9 +281,14 @@ public class BattleSystem : MonoBehaviour
         }
 
         yield return new WaitForSeconds(dialogueSpeedSeconds);
+        //Resume time
+        TimeChangeScript.Instance.ResumeTime();
+        
+        PlayerInfo.Instance.UnfreezeMovement();
         
         Destroy(playerGO);
         Destroy(enemyGO);
+        state = BattleState.WAIT;
         combatHUD.SetActive(false);
     }
 }

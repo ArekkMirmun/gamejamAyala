@@ -4679,9 +4679,9 @@ GameObject:
   - component: {fileID: 467448114}
   - component: {fileID: 467448117}
   - component: {fileID: 467448116}
-  - component: {fileID: 467448118}
   - component: {fileID: 467448115}
   - component: {fileID: 467448119}
+  - component: {fileID: 467448120}
   m_Layer: 0
   m_Name: Sign 2
   m_TagString: Untagged
@@ -4780,26 +4780,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 467448113}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &467448118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 467448113}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bc8e374eb90ba42a2f708ab22d4530, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueMark: {fileID: 42299755}
-  dialogueCanvas: {fileID: 1397196180}
-  dialogueText: {fileID: 2033786434}
-  dialogueLines:
-  - Danger! It is recommended to be level 2 before entering this area
-  isPlayerInRange: 0
-  isDialogueActive: 0
-  lineIndex: 0
 --- !u!65 &467448119
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4821,6 +4801,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.3207035, y: 8.067038, z: 100.495865}
   m_Center: {x: 0.0098432815, y: 0.7416544, z: -44.679535}
+--- !u!114 &467448120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 467448113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc01f576ccab1ac43b7d90aabf022b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueMark: {fileID: 42299755}
+  dialogueCanvas: {fileID: 1397196180}
+  dialogueText: {fileID: 2033786434}
+  dialogueLines:
+  - 'Danger! It is recommended to be level 2 before entering this area
+
+'
+  isPlayerInRange: 0
+  isDialogueActive: 0
+  lineIndex: 0
 --- !u!1001 &470459208
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9610,9 +9612,9 @@ GameObject:
   - component: {fileID: 925025126}
   - component: {fileID: 925025129}
   - component: {fileID: 925025128}
-  - component: {fileID: 925025130}
   - component: {fileID: 925025127}
   - component: {fileID: 925025131}
+  - component: {fileID: 925025132}
   m_Layer: 0
   m_Name: Sign 3
   m_TagString: Untagged
@@ -9711,26 +9713,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 925025125}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &925025130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 925025125}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bc8e374eb90ba42a2f708ab22d4530, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueMark: {fileID: 254049378}
-  dialogueCanvas: {fileID: 201704058}
-  dialogueText: {fileID: 873824128}
-  dialogueLines:
-  - Danger! It is recommended to be level 3 before entering this area
-  isPlayerInRange: 0
-  isDialogueActive: 0
-  lineIndex: 0
 --- !u!65 &925025131
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9752,6 +9734,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.3207035, y: 8.067038, z: 100.495865}
   m_Center: {x: 0.0098432815, y: 0.7416544, z: -44.679535}
+--- !u!114 &925025132
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 925025125}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc01f576ccab1ac43b7d90aabf022b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueMark: {fileID: 254049378}
+  dialogueCanvas: {fileID: 201704058}
+  dialogueText: {fileID: 873824128}
+  dialogueLines:
+  - 'Danger! It is recommended to be level 3 before entering this area
+
+'
+  isPlayerInRange: 0
+  isDialogueActive: 0
+  lineIndex: 0
 --- !u!1001 &927023141
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13933,6 +13937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueController: {fileID: 0}
+  pickableController: {fileID: 0}
 --- !u!4 &1285926609 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5924205756676854172, guid: 2d0dce82b42199643a9f2fab46331aa1, type: 3}
@@ -17320,9 +17325,9 @@ GameObject:
   - component: {fileID: 1673325793}
   - component: {fileID: 1673325796}
   - component: {fileID: 1673325795}
-  - component: {fileID: 1673325797}
   - component: {fileID: 1673325794}
   - component: {fileID: 1673325798}
+  - component: {fileID: 1673325799}
   m_Layer: 0
   m_Name: Sign 1
   m_TagString: Untagged
@@ -17421,26 +17426,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673325792}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1673325797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1673325792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bc8e374eb90ba42a2f708ab22d4530, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueMark: {fileID: 528045133}
-  dialogueCanvas: {fileID: 1700807859}
-  dialogueText: {fileID: 1903397782}
-  dialogueLines:
-  - Danger! There are dangerous enemies on the area
-  isPlayerInRange: 0
-  isDialogueActive: 0
-  lineIndex: 0
 --- !u!65 &1673325798
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -17462,6 +17447,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.3207035, y: 8.067038, z: 100.495865}
   m_Center: {x: 0.0098432815, y: 0.7416544, z: -44.679535}
+--- !u!114 &1673325799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673325792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc01f576ccab1ac43b7d90aabf022b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueMark: {fileID: 528045133}
+  dialogueCanvas: {fileID: 1700807859}
+  dialogueText: {fileID: 1903397782}
+  dialogueLines:
+  - Danger! There are dangerous enemies in this area.
+  isPlayerInRange: 0
+  isDialogueActive: 0
+  lineIndex: 0
 --- !u!4 &1679780714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5924205756676854172, guid: 2d0dce82b42199643a9f2fab46331aa1, type: 3}
@@ -23178,7 +23183,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 59453846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bc8e374eb90ba42a2f708ab22d4530, type: 3}
+  m_Script: {fileID: 11500000, guid: dc01f576ccab1ac43b7d90aabf022b57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueMark: {fileID: 1516980132}
@@ -23186,8 +23191,8 @@ MonoBehaviour:
   dialogueText: {fileID: 1922187658}
   dialogueLines:
   - Hello, I'm Alberto, the city priest
-  - I see you are a bit hurt
-  - Come in so I can heal your wounds
+  - "I see you are a bit hurt\r"
+  - "Let me heal your wounds\r"
   isPlayerInRange: 0
   isDialogueActive: 0
   lineIndex: 0
@@ -23393,28 +23398,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8932482434129751618, guid: 1b6ad8d6341d85b4c8d9f815bc7f36dd, type: 3}
   m_PrefabInstance: {fileID: 8760110409511952791}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7150637408234370254
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5502883571113557818}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62bc8e374eb90ba42a2f708ab22d4530, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueMark: {fileID: 230551339}
-  dialogueCanvas: {fileID: 1971151892}
-  dialogueText: {fileID: 1549327875}
-  dialogueLines:
-  - Good afternoon, what are you doing in this area without a gun?
-  - You gotta be careful with those enemies
-  - Take this gun in order to defend yourself better
-  isPlayerInRange: 0
-  isDialogueActive: 0
-  lineIndex: 0
 --- !u!65 &7150637408234370255
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -23436,6 +23419,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.3057086, y: 1, z: 2.4031854}
   m_Center: {x: -0.046099614, y: 0, z: -0.7015943}
+--- !u!114 &7150637408234370257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5502883571113557818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc01f576ccab1ac43b7d90aabf022b57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueMark: {fileID: 230551339}
+  dialogueCanvas: {fileID: 1971151892}
+  dialogueText: {fileID: 1549327875}
+  dialogueLines:
+  - Good afternoon, what are you doing in this area without a gun?
+  - You gotta be careful with those enemies
+  - Take this gun in order to defend yourself better
+  isPlayerInRange: 0
+  isDialogueActive: 0
+  lineIndex: 0
 --- !u!1001 &7471490533402426582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -23650,7 +23655,7 @@ PrefabInstance:
       addedObject: {fileID: 7150637408234370255}
     - targetCorrespondingSourceObject: {fileID: 1068846111371587370, guid: 1b6ad8d6341d85b4c8d9f815bc7f36dd, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7150637408234370254}
+      addedObject: {fileID: 7150637408234370257}
   m_SourcePrefab: {fileID: 100100000, guid: 1b6ad8d6341d85b4c8d9f815bc7f36dd, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

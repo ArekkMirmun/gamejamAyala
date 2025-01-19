@@ -45,9 +45,12 @@ public class DialogueController : MonoBehaviour
 
     public void StartDialogue()
     {
-        Debug.Log("Starting dialogue");
         if (!isDialogueActive)
         {
+            //freeze player with FreezeMovement function
+            PlayerInfo.Instance.FreezeMovement();
+            
+            
             isDialogueActive = true;
             dialogueCanvas.SetActive(true);
             dialogueMark.SetActive(false);
@@ -92,6 +95,7 @@ public class DialogueController : MonoBehaviour
                 typingTime = 0.05f;
                 dialogueMark.SetActive(true);
                 isDialogueActive = false;
+                PlayerInfo.Instance.UnfreezeMovement();
             }
         }
     }

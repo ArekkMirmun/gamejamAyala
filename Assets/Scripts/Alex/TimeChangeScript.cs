@@ -9,17 +9,25 @@ public class TimeChangeScript : MonoBehaviour
     //We use a float to keep track of the time
     //We want the level to take 4 minutes to go from 12:00 to 24:00
     
+    public static TimeChangeScript Instance;
     public TextMeshProUGUI timeText;
     public float time;
     public float timeSpeed = 1f;
     public float hour;
     public float minutes;
     private bool _isPaused = false;
+
+    public GameObject midnightIntro;
+    public GameObject bossPrefab;
+
+    public GameObject battleHUD;
+    public GameObject timerHUD;
     
     
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
         time = 12.00f;
         minutes = 0;
     }
@@ -43,15 +51,35 @@ public class TimeChangeScript : MonoBehaviour
             if (time >= 24)
             {
                 _isPaused = true;
-                MidnightEvent();
+                StartCoroutine(MidnightEvent());
             }
         }
     }
 
-    private void MidnightEvent()
+    private IEnumerator MidnightEvent()
     {
         //Do something when it's midnight
         print("It's midnight");
+        midnightIntro.SetActive(true);
+        yield return new WaitForSeconds(12f);
+        //Start the boss fight
+        
+        PlayerInfo.Instance.EnemyEncountered(bossPrefab);
+        yield return new WaitForSeconds(2f);
+        midnightIntro.SetActive(false);
     } 
+    
+    
+    public void PauseTime()
+    {
+        _isPaused = true;
+        timerHUD.SetActive(false);
+    }
+    
+    public void ResumeTime()
+    {
+        _isPaused = false;
+        timerHUD.SetActive(true);
+    }
     
 }
