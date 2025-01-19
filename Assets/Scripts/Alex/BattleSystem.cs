@@ -213,7 +213,7 @@ public class BattleSystem : MonoBehaviour
         bool isDead = enemyUnit.TakeDamage(damage);
         
         enemyHUD.SetHP(enemyUnit.currentHP);
-        dialogueText.text = "The made " + damage + " damage!";
+        dialogueText.text = "The attack made " + damage + " damage!";
         
         yield return new WaitForSeconds(dialogueSpeedSeconds);
         
