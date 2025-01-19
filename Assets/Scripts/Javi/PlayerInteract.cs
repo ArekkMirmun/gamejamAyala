@@ -7,6 +7,9 @@ public class PlayerInteract : MonoBehaviour
     public PickableController pickableController;
     public BlockingFenceController blockingFenceController;
 
+    public GameObject SettingsHUD;
+    public GameObject TimeHUD;
+
     public void OnInteract()
     {
         print("Interacting with NPC");
@@ -31,5 +34,19 @@ public class PlayerInteract : MonoBehaviour
         {
             pickableController.NextText();
         }
+    }
+
+    public void OnPause()
+    {
+        Time.timeScale = 0f;
+        TimeHUD.SetActive(false);
+        SettingsHUD.SetActive(true);
+    }
+    
+    public void OnUnpause()
+    {
+        Time.timeScale = 1f;
+        TimeHUD.SetActive(true);
+        SettingsHUD.SetActive(false);
     }
 }
