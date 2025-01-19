@@ -5,6 +5,7 @@ public class PlayerInteract : MonoBehaviour
 {
     public DialogueController dialogueController;
     public PickableController pickableController;
+    public BlockingFenceController blockingFenceController;
 
     public void OnInteract()
     {

@@ -6280,7 +6280,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &452304990
 Transform:
   m_ObjectHideFlags: 0
@@ -13756,7 +13756,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &967226052
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18828,6 +18828,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueController: {fileID: 0}
   pickableController: {fileID: 0}
+  blockingFenceController: {fileID: 0}
 --- !u!95 &1285336158
 Animator:
   serializedVersion: 7
