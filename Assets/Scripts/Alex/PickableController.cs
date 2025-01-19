@@ -143,6 +143,11 @@ public class PickableController : MonoBehaviour
 
     public void NextText()
     {
+        if (!isDialogueActive)
+        {
+            return;
+        }
+
         if (_isTyping)
         {
             _typingTime = 0;

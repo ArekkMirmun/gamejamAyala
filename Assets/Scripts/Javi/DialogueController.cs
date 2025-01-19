@@ -47,7 +47,6 @@ public class DialogueController : MonoBehaviour
     {
         if (!isDialogueActive)
         {
-            //freeze player with FreezeMovement function
             PlayerInfo.Instance.FreezeMovement();
             
             
