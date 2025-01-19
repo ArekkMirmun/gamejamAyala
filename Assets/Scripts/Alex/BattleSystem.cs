@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 
-public enum BattleState {WAIT, START, PLAYERTURN, ENEMYTURN, WON, LOST }
+public enum BattleState {WAIT, START, PLAYERTURN, INPROGRESS, ENEMYTURN, WON, LOST }
 public class BattleSystem : MonoBehaviour
 {
 
@@ -33,6 +33,9 @@ public class BattleSystem : MonoBehaviour
     public TextMeshProUGUI dialogueText;
     public float dialogueSpeedSeconds = 2f;
     public SceneManager sceneManager;
+    
+    GameObject playerGO;
+    GameObject enemyGO;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -51,12 +54,13 @@ public class BattleSystem : MonoBehaviour
         _playerPrefab = playerInfo.currentPlayerPrefab;
         _enemyPrefab = enemyCombatPrefab;
         combatHUD.SetActive(true);
+        state = BattleState.START;
         StartCoroutine(SetupBattle());
     }
 
     private IEnumerator SetupBattle()
     {
-        GameObject playerGO = Instantiate(_playerPrefab, playerBattleStation);
+        playerGO = Instantiate(_playerPrefab, playerBattleStation);
         playerUnit = playerGO.GetComponent<Unit>();
         
         playerUnit.unitLevel = playerInfo.currentLevel;
@@ -64,7 +68,7 @@ public class BattleSystem : MonoBehaviour
         playerUnit.maxHP = playerInfo.maxHP;
         
         
-        GameObject enemyGO = Instantiate(_enemyPrefab, enemyBattleStation);
+        enemyGO = Instantiate(_enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponent<Unit>();
         
         dialogueText.text = "A wild " + enemyUnit.unitName + " approaches...";
@@ -84,13 +88,13 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
     }
 
     private void PlayerTurn()
     {
+        state = BattleState.PLAYERTURN;
         dialogueText.text = "Choose an action:";
     }
     
@@ -99,6 +103,8 @@ public class BattleSystem : MonoBehaviour
         if (state != BattleState.PLAYERTURN)
             return;
         
+        state = BattleState.INPROGRESS;
+        
         StartCoroutine(PlayerAttack());
     }
     
@@ -106,6 +112,9 @@ public class BattleSystem : MonoBehaviour
     {
         if (state != BattleState.PLAYERTURN)
             return;
+        
+        state = BattleState.INPROGRESS;
+
         
         StartCoroutine(PlayerHeal());
     }
@@ -117,18 +126,30 @@ public class BattleSystem : MonoBehaviour
             
             dialogueText.text = "You are out of heals!";
             yield return new WaitForSeconds(dialogueSpeedSeconds);
+            PlayerTurn();
         }
         else
         {
-            playerInfo.currentHeals--;
-                    playerUnit.Heal(enemyUnit.damage + 2);
+            //checks if the player is max HP already
+            if (playerUnit.currentHP == playerUnit.maxHP)
+            {
+                dialogueText.text = "You are already at max HP!";
+                yield return new WaitForSeconds(dialogueSpeedSeconds);
+                PlayerTurn();
+
+            }
+            else
+            {
+                playerInfo.currentHeals--;
+                playerUnit.Heal(enemyUnit.damage + 2);
                     
-                    playerHUD.SetHP(playerUnit.currentHP);
-                    dialogueText.text = "You feel renewed strength!";
-                    yield return new WaitForSeconds(dialogueSpeedSeconds);
+                playerHUD.SetHP(playerUnit.currentHP);
+                dialogueText.text = "You feel renewed strength!";
+                yield return new WaitForSeconds(dialogueSpeedSeconds);
         
-                    state = BattleState.ENEMYTURN;
-                    StartCoroutine(EnemyTurn());
+                state = BattleState.ENEMYTURN;
+                StartCoroutine(EnemyTurn());
+            }
         }
     }
 
@@ -163,7 +184,8 @@ public class BattleSystem : MonoBehaviour
                 yield return new WaitForSeconds(dialogueSpeedSeconds);
                 //Show text that says "Your level is now: " + playerInfo.currentLevel +1
                 dialogueText.text = "Your level is now: " + (playerInfo.currentLevel + 1);
-                
+                yield return new WaitForSeconds(dialogueSpeedSeconds);
+
             }
             
             StartCoroutine(EndBattle());
@@ -194,7 +216,6 @@ public class BattleSystem : MonoBehaviour
         }
         else
         {
-            state = BattleState.PLAYERTURN;
             PlayerTurn();
         }
     }
@@ -214,6 +235,9 @@ public class BattleSystem : MonoBehaviour
         }
 
         yield return new WaitForSeconds(dialogueSpeedSeconds);
+        
+        Destroy(playerGO);
+        Destroy(enemyGO);
         combatHUD.SetActive(false);
     }
 }

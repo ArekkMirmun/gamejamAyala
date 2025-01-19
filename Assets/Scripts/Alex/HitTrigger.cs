@@ -11,6 +11,14 @@ public class HitTrigger : MonoBehaviour
            GetComponent<Collider>().enabled = true;
            PlayerInfo.Instance.EnemyEncountered(other.gameObject);
        }
+
+       if (other.gameObject.CompareTag("Barrel"))
+       {
+           print("Barrel hit");
+           GetComponent<Collider>().enabled = true;
+           BarrelController barrel = other.gameObject.GetComponent<BarrelController>();
+           barrel.Break();
+       }
    }
    
    // OnAttack is called when the player attacks

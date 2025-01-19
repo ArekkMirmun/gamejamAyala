@@ -4,22 +4,31 @@ using UnityEngine;
 public class PlayerInteract : MonoBehaviour
 {
     public DialogueController dialogueController;
+    public PickableController pickableController;
 
     public void OnInteract()
     {
         print("Interacting with NPC");
-        if (dialogueController.isPlayerInRange)
+        if (dialogueController && dialogueController.isPlayerInRange)
         {
-            
             dialogueController.StartDialogue();
+        }
+        else if (pickableController && pickableController.isPlayerInRange)
+        {
+            pickableController.StartDialogue();
         }
     }
 
     public void OnNextText()
     {
-        if (dialogueController.isPlayerInRange)
+        if (dialogueController && dialogueController.isPlayerInRange)
         {
             dialogueController.NextText();
+        }
+
+        if (pickableController && pickableController.isPlayerInRange)
+        {
+            pickableController.NextText();
         }
     }
 }

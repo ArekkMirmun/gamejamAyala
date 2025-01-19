@@ -14,6 +14,7 @@ public class BattleHUD : MonoBehaviour
         levelText.text = "Lvl " + unit.unitLevel;
         hpSlider.maxValue = unit.maxHP;
         hpSlider.value = unit.currentHP;
+        hpSlider.gameObject.SetActive(true);
     }
     
     public void SetHP(int hp)

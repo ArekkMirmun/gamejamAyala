@@ -38,6 +38,7 @@ public class PlayerInfo : MonoBehaviour
 
     public WeaponType currentWeapon;
     public GameObject currentPlayerPrefab;
+    private bool _swordPicked;
     
     public PlayerInput playerInput;
 
@@ -91,9 +92,10 @@ public class PlayerInfo : MonoBehaviour
     {
         //If there is one enemy left to level up and the enemy defeated is sword type
         //, instantiate a gun on enemy position
-        if (enemiesToLevelUp == 1 && enemy.GetComponent<EnemyInfo>().enemyType == EnemyType.Sword)
+        if (enemiesToLevelUp == 1 && enemy.GetComponent<EnemyInfo>().enemyType == EnemyType.Sword && !_swordPicked)
         {
             Instantiate(weaponPrefabSword, enemy.transform.position, Quaternion.identity);
+            _swordPicked = true;
         }
         Destroy(enemy);
         //Enable player input
