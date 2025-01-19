@@ -36,8 +36,13 @@ public class BattleSystem : MonoBehaviour
     
     GameObject playerGO;
     Animator playerAnimator;
+    AudioSource playerAudioSource; 
+    AudioSource enemyAudioSource;
     GameObject enemyGO;
     Animator enemyAnimator;
+    
+    public AudioSource normalBackgroundMusic;
+    public AudioSource battleBackgroundMusic;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -46,11 +51,14 @@ public class BattleSystem : MonoBehaviour
         Instance = this;
         state = BattleState.WAIT;
         combatHUD.SetActive(false);
+        normalBackgroundMusic.Play();
     }
     
     //Starts the combat
     public void StartBattle(GameObject enemyHitted, GameObject enemyCombatPrefab)
     {
+        normalBackgroundMusic.Pause();
+        battleBackgroundMusic.Play();
         PlayerInfo.Instance.FreezeMovement();
         _currentEnemy = enemyHitted;
         playerInfo = PlayerInfo.Instance;
@@ -72,6 +80,9 @@ public class BattleSystem : MonoBehaviour
         //Set player animator with child of player prefab
         playerAnimator = playerGO.transform.GetChild(0).GetComponent<Animator>();
         
+        //Set player sound
+        playerAudioSource = playerGO.GetComponent<AudioSource>();
+        
         playerUnit.unitLevel = playerInfo.currentLevel;
         playerUnit.currentHP = playerInfo.playerCurrentHP;
         playerUnit.maxHP = playerInfo.maxHP;
@@ -79,6 +90,9 @@ public class BattleSystem : MonoBehaviour
         
         enemyGO = Instantiate(_enemyPrefab, enemyBattleStation);
         enemyUnit = enemyGO.GetComponent<Unit>();
+        
+        //Set enemy sound
+        enemyAudioSource = enemyGO.GetComponent<AudioSource>();
         
         //Set enemy animator with child of enemy prefab
         enemyAnimator = enemyGO.transform.GetChild(0).GetComponent<Animator>();
@@ -198,6 +212,7 @@ public class BattleSystem : MonoBehaviour
         //Attack enemy triggering the attack animation
         playerAnimator.SetTrigger("Attack");
         dialogueText.text = "You attack!";
+        playerAudioSource.Play();
         yield return new WaitForSeconds(dialogueSpeedSeconds);
         int damage = playerUnit.damage;
         //calculate critic change 1/5
@@ -245,6 +260,7 @@ public class BattleSystem : MonoBehaviour
     {
         //Enemy attacks player triggering the attack animation
         enemyAnimator.SetTrigger("Attack");
+        enemyAudioSource.Play();
         dialogueText.text = enemyUnit.unitName + " attacks!";
         
         yield return new WaitForSeconds(dialogueSpeedSeconds);
@@ -285,6 +301,8 @@ public class BattleSystem : MonoBehaviour
         TimeChangeScript.Instance.ResumeTime();
         
         PlayerInfo.Instance.UnfreezeMovement();
+        normalBackgroundMusic.Play();
+        battleBackgroundMusic.Stop();
         
         Destroy(playerGO);
         Destroy(enemyGO);

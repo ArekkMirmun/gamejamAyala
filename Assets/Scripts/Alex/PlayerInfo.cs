@@ -161,6 +161,7 @@ public class PlayerInfo : MonoBehaviour
     public void FreezeMovement()
     {
         playerInput.GetComponent<CharacterMovement>().FreezeMovement();
+        
     }
     public void UnfreezeMovement()
     {

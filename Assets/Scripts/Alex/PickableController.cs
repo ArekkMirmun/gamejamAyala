@@ -18,6 +18,7 @@ public class PickableController : MonoBehaviour
     [SerializeField] private GameObject dialogueMark;
     [SerializeField] private GameObject dialogueCanvas;
     [SerializeField] private TextMeshProUGUI dialogueText;
+    [SerializeField] private AudioSource pickableSound;
     [SerializeField, TextArea(3, 6)] private string[] dialogueLines;
     
     public bool shouldDestroy;
@@ -116,6 +117,7 @@ public class PickableController : MonoBehaviour
     {
         if (!isDialogueActive)
         {
+            pickableSound.Play();
             CheckPossibleExtraDialogue();
             PlayerInfo.Instance.FreezeMovement();
             isDialogueActive = true;
@@ -190,6 +192,7 @@ public class PickableController : MonoBehaviour
                         }
                         break;
                 }
+                
                 dialogueCanvas.SetActive(false);
                 isDialogueActive = false;
                 lineIndex = 0;

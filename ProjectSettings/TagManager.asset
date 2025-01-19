@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - Barrel
+  - Cow
   layers:
   - Default
   - TransparentFX

@@ -14,6 +14,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Animator animator; // Reference to the player's Animator
     [SerializeField] private Slider staminaSlider; // Reference to the stamina slider
     
+    //AudioSources for running and walking
+    [SerializeField] private AudioSource running;
+    [SerializeField] private AudioSource walking;
+    
 
     private float _targetSpeed = 0f;      // Desired speed based on input
     private float _currentSpeed = 0f;    // Current speed (accelerates toward _targetSpeed)
@@ -34,6 +38,32 @@ public class CharacterMovement : MonoBehaviour
     void FixedUpdate()
     {
         if (frozen) return;
+        
+        // Play the appropriate audio clip
+        if (_currentSpeed > 0)
+        {
+            if (isSprinting)
+            {
+                if (!running.isPlaying)
+                {
+                    running.Play();
+                    walking.Stop();
+                }
+            }
+            else
+            {
+                if (!walking.isPlaying)
+                {
+                    walking.Play();
+                    running.Stop();
+                }
+            }
+        }
+        else
+        {
+            walking.Stop();
+            running.Stop();
+        }
         
         // Calculate movement input magnitude
         bool isMoving = _xAxis != 0 || _zAxis != 0;
@@ -102,6 +132,9 @@ public class CharacterMovement : MonoBehaviour
     public void FreezeMovement()
     {
         frozen = true;
+        //Stop all sounds
+        walking.Stop();
+        running.Stop();
     }
     
     public void UnfreezeMovement()

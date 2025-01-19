@@ -6,6 +6,9 @@ public class HitTrigger : MonoBehaviour
     private static readonly int Hit = Animator.StringToHash("Hit");
     public Collider hitCollider;
     [SerializeField] private Animator animator; // Reference to the player's Animator
+    [SerializeField] private AudioSource attackSound; // Reference to the player's attack sound
+    [SerializeField] private AudioSource cowHit1; // Reference to the cow hit sound
+    [SerializeField] private AudioSource cowHit2; // Reference to the cow hit sound
     private bool _isAttacking = false;
     
    public void OnTriggerEnter(Collider other)
@@ -25,12 +28,27 @@ public class HitTrigger : MonoBehaviour
            BarrelController barrel = other.gameObject.GetComponent<BarrelController>();
            barrel.Break();
        }
+       //if cow is hit
+         if (other.gameObject.CompareTag("Cow"))
+         {
+             //random to choose between two sounds
+                int random = Random.Range(0, 2);
+                if (random == 0)
+                {
+                    cowHit1.Play();
+                }
+                else
+                {
+                    cowHit2.Play();
+                }
+         }
    }
    
    // OnAttack is called when the player attacks
     public void OnAttack()
     {
         if (CheckInBattle() || _isAttacking) return;
+        attackSound.Play();
         animator.SetTrigger(Hit);
         StartCoroutine(Attack());
     }
