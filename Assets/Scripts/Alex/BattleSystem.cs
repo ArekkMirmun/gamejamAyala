@@ -159,6 +159,14 @@ public class BattleSystem : MonoBehaviour
 
     private IEnumerator RunAway()
     {
+        
+        //Check if enemy is boss
+        if (enemyUnit.unitName == "Nio")
+        {
+            dialogueText.text = "You can't run away from the moon!";
+            yield return new WaitForSeconds(dialogueSpeedSeconds);
+            PlayerTurn();
+        }
         //Run away from the enemy with a chance of 80%
         if (Random.Range(0, 5) != 3)
         {

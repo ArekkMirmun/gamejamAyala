@@ -31,7 +31,7 @@ public class PlayerInteract : MonoBehaviour
             dialogueController.NextText();
         }
 
-        if (pickableController && pickableController.isPlayerInRange)
+        if (pickableController && (pickableController.isPlayerInRange || pickableController.consumibleType == ConsumibleType.None))
         {
             pickableController.NextText();
         }

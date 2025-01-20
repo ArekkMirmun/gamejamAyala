@@ -10,7 +10,8 @@ public enum ConsumibleType
     Sword,
     Rifle,
     Priest,
-    Farmer
+    Farmer,
+    None
 }
 public class PickableController : MonoBehaviour
 {
