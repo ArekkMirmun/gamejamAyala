@@ -7,8 +7,9 @@ public class PlayerInteract : MonoBehaviour
     public PickableController pickableController;
     public BlockingFenceController blockingFenceController;
 
-    public GameObject SettingsHUD;
-    public GameObject TimeHUD;
+    public SettingsMenu settingsMenu;
+    private bool _isPaused = false;
+    
 
     public void OnInteract()
     {
@@ -38,15 +39,21 @@ public class PlayerInteract : MonoBehaviour
 
     public void OnPause()
     {
-        Time.timeScale = 0f;
-        TimeHUD.SetActive(false);
-        SettingsHUD.SetActive(true);
+        _isPaused = true;
+        settingsMenu.OpenSettings();
+        if (BossAnimation.instance)
+        {
+            BossAnimation.instance.PauseAnimation();
+        }
     }
     
     public void OnUnpause()
     {
-        Time.timeScale = 1f;
-        TimeHUD.SetActive(true);
-        SettingsHUD.SetActive(false);
+        _isPaused = false;
+        settingsMenu.CloseSettings();
+        if (BossAnimation.instance)
+        {
+            BossAnimation.instance.ResumeAnimation();
+        }
     }
 }

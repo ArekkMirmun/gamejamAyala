@@ -48,8 +48,6 @@ public class DialogueController : MonoBehaviour
         if (!isDialogueActive)
         {
             PlayerInfo.Instance.FreezeMovement();
-            
-            
             isDialogueActive = true;
             dialogueCanvas.SetActive(true);
             dialogueMark.SetActive(false);

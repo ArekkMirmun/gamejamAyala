@@ -1,5 +1,7 @@
+using System;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class RandomPatrol : MonoBehaviour
 {
@@ -7,14 +9,19 @@ public class RandomPatrol : MonoBehaviour
 
     public float wanderRadius = 10f;
     public float wanderInterval = 5f;
+    public bool shouldBePaused;
 
     private float timer;
+
+    private float speed;
 
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         timer = wanderInterval;
         
+        //gets speed from agent and sets private speed variable to it
+        speed = agent.speed;
         //start at random timer value to avoid all NPCs moving at the same time
         timer = Random.Range(0, wanderInterval);
 
@@ -49,7 +56,24 @@ public class RandomPatrol : MonoBehaviour
         }
         
     }
-    
+
+    private void FixedUpdate()
+    {
+        //checks if time is paused
+        TimeChangeScript timeChangeScript = TimeChangeScript.Instance;
+        
+        
+        if (timeChangeScript.isPaused)
+        {
+            //sets speed to 0
+            agent.speed = 0;
+            agent.velocity = Vector3.zero;
+        }
+        else
+        {
+            agent.speed = speed;
+        }
+    }
 
 
     void LockRotation()

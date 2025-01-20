@@ -42,6 +42,8 @@ public class PlayerInfo : MonoBehaviour
     private bool _swordPicked;
     
     public PlayerInput playerInput;
+    
+    public SceneManager sceneManager;
 
     public void Start()
     {
@@ -111,6 +113,13 @@ public class PlayerInfo : MonoBehaviour
             _swordPicked = true;
         }
         Destroy(enemy);
+
+        if (enemy.GetComponent<EnemyInfo>().enemyType == EnemyType.Boss)
+        {
+            sceneManager.LoadScene("GameWin");
+
+        }
+        
         //Enable player input
         playerInput.GetComponent<CharacterMovement>().UnfreezeMovement();
         //Decrease enemies to level up
@@ -161,10 +170,11 @@ public class PlayerInfo : MonoBehaviour
     public void FreezeMovement()
     {
         playerInput.GetComponent<CharacterMovement>().FreezeMovement();
-        
+        TimeChangeScript.Instance.PauseTime();
     }
     public void UnfreezeMovement()
     {
         playerInput.GetComponent<CharacterMovement>().UnfreezeMovement();
+        TimeChangeScript.Instance.ResumeTime();
     }
 }

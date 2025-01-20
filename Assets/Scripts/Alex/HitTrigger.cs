@@ -47,6 +47,9 @@ public class HitTrigger : MonoBehaviour
    // OnAttack is called when the player attacks
     public void OnAttack()
     {
+        //check if game paused
+        TimeChangeScript timeChangeScript = TimeChangeScript.Instance;
+        if (timeChangeScript.isPaused) return;
         if (CheckInBattle() || _isAttacking) return;
         attackSound.Play();
         animator.SetTrigger(Hit);

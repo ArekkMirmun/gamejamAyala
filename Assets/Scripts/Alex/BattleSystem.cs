@@ -43,6 +43,7 @@ public class BattleSystem : MonoBehaviour
     
     public AudioSource normalBackgroundMusic;
     public AudioSource battleBackgroundMusic;
+    public AudioSource bossIntroMusic;
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -308,5 +309,12 @@ public class BattleSystem : MonoBehaviour
         Destroy(enemyGO);
         state = BattleState.WAIT;
         combatHUD.SetActive(false);
+    }
+    
+    public void PlayBossMusic()
+    {
+        normalBackgroundMusic.Pause();
+        battleBackgroundMusic.Stop();
+        bossIntroMusic.Play();
     }
 }

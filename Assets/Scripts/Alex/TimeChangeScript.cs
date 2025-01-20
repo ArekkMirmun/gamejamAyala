@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class TimeChangeScript : MonoBehaviour
 {
@@ -15,13 +16,12 @@ public class TimeChangeScript : MonoBehaviour
     public float timeSpeed = 1f;
     public float hour;
     public float minutes;
-    private bool _isPaused = false;
+    public bool isPaused = false;
 
     public GameObject midnightIntro;
     public GameObject bossPrefab;
 
     public GameObject battleHUD;
-    public GameObject timerHUD;
     
     
     // Start is called before the first frame update
@@ -30,6 +30,10 @@ public class TimeChangeScript : MonoBehaviour
         Instance = this;
         time = 12.00f;
         minutes = 0;
+        //Resume time when the game starts
+        ResumeTime();
+        //Sets time scale
+        Time.timeScale = 1;
     }
     
     // Update is called once per frame
@@ -37,7 +41,7 @@ public class TimeChangeScript : MonoBehaviour
 
     void Update()
     {
-        if (!_isPaused)
+        if (!isPaused)
         {
             //rotate the directional light around the level to simulate the time of the day
             RenderSettings.sun.transform.Rotate(Vector3.right * (Time.deltaTime * timeSpeed / 6));
@@ -50,7 +54,8 @@ public class TimeChangeScript : MonoBehaviour
             timeText.text = hour + ":" + minutesString;
             if (time >= 24)
             {
-                _isPaused = true;
+                isPaused = true;
+                time = 0;
                 StartCoroutine(MidnightEvent());
             }
         }
@@ -58,6 +63,7 @@ public class TimeChangeScript : MonoBehaviour
 
     private IEnumerator MidnightEvent()
     {
+        BattleSystem.Instance.PlayBossMusic();
         //Do something when it's midnight
         print("It's midnight");
         midnightIntro.SetActive(true);
@@ -72,14 +78,12 @@ public class TimeChangeScript : MonoBehaviour
     
     public void PauseTime()
     {
-        _isPaused = true;
-        timerHUD.SetActive(false);
+        isPaused = true;
     }
     
     public void ResumeTime()
     {
-        _isPaused = false;
-        timerHUD.SetActive(true);
+        isPaused = false;
     }
     
 }
