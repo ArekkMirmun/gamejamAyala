@@ -1,5 +1,3 @@
-### README  
-
 # MoonLight  
 _A Turn-Based Strategy Game with a Sinister Twist_  
 
